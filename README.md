@@ -1,6 +1,6 @@
 # portfolio-website
 
-# portfolio-website
+- My portfolio website repo
 
 ## About
 This section provides information about me and my background.
