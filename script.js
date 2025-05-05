@@ -5,6 +5,11 @@ function toggleMenu() {
   icon.classList.toggle("open");
 }
 
+// Add smooth page transitions
+window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
+
 // Add a toggle button for dark mode
 const darkModeToggle = document.createElement('button');
 darkModeToggle.id = 'dark-mode-toggle';
@@ -18,7 +23,52 @@ function toggleDarkMode() {
         el.classList.toggle('dark-mode');
     });
     darkModeToggle.classList.toggle('dark-mode');
+
+    // Save preference to localStorage
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode);
 }
+
+// Load dark mode preference on page load
+window.addEventListener('DOMContentLoaded', () => {
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+        toggleDarkMode();
+    }
+});
 
 // Add event listener to the toggle button
 darkModeToggle.addEventListener('click', toggleDarkMode);
+
+// Highlight active section in navigation
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+    let current = '';
+
+    sections.forEach((section) => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= sectionTop - sectionHeight / 3) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach((link) => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').includes(current)) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// Smooth scrolling for navigation links
+navLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const targetSection = document.getElementById(targetId);
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+    });
+});
