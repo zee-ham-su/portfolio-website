@@ -197,6 +197,18 @@ section {
 .title {
     font-size: 3rem;
     text-align: center;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 #socials-container {
@@ -223,10 +235,15 @@ section {
 
 .btn {
     font-weight: 600;
-    transition: all 300ms ease;
+    transition: transform 0.3s ease, background-color 0.3s ease;
     padding: 1rem;
     width: 8rem;
     border-radius: 2rem;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    background-color: #ff7f50;
 }
 
 .btn-color-1,
@@ -301,6 +318,18 @@ section {
     border: rgb(53, 53, 53) 0.1rem solid;
     border-color: rgb(163, 163, 163);
     text-align: center;
+    animation: slideUp 1.5s ease-in-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .section-container {
@@ -365,9 +394,9 @@ article .icon {
 }
 
 .project-img {
-    border-radius: 2rem;
-    width: 90%;
-    height: 90%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
 }
 
 .project-title {
@@ -429,4 +458,49 @@ footer {
 
 footer p {
     text-align: center;
+}
+
+/* Add dark mode styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+nav.dark-mode {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+.details-container.dark-mode {
+    background-color: #1e1e1e;
+    border-color: #333333;
+}
+
+.btn.dark-mode {
+    background-color: #333333;
+    color: #ffffff;
+    border-color: #444444;
+}
+
+.btn.dark-mode:hover {
+    background-color: #444444;
+}
+
+/* Add a toggle button for dark mode */
+#dark-mode-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#dark-mode-toggle.dark-mode {
+    background-color: #333333;
+    color: #ffffff;
 }
