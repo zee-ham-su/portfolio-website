@@ -72,3 +72,35 @@ navLinks.forEach((link) => {
         targetSection.scrollIntoView({ behavior: 'smooth' });
     });
 });
+
+// Scroll to Top Button
+const scrollToTopButton = document.getElementById('scrollToTop');
+
+window.onscroll = function() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        scrollToTopButton.style.display = 'block';
+    } else {
+        scrollToTopButton.style.display = 'none';
+    }
+};
+
+scrollToTopButton.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Project Filter/Search
+const searchBar = document.getElementById('searchBar');
+const projectTitles = document.querySelectorAll('.project-title');
+const projectContainers = document.querySelectorAll('.details-container');
+
+searchBar.addEventListener('input', function(e) {
+    const searchText = e.target.value.toLowerCase();
+    projectTitles.forEach((title, index) => {
+        const container = projectContainers[index];
+        if (title.textContent.toLowerCase().includes(searchText)) {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    });
+});

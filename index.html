@@ -8,6 +8,15 @@
     <title>My Portfolio</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="mediaqueries.css" />
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-XXXXXXXXX-X');
+    </script>
 </head>
 
 <body>
@@ -282,6 +291,9 @@
     <section id="projects">
         <p class="section__text__p1">Browse My Recent</p>
         <h1 class="title">Projects</h1>
+        <div id="project-filter">
+            <input type="text" id="searchBar" placeholder="Search projects...">
+        </div>
         <div class="experience-details-container">
             <div class="about-containers">
                 <div class="details-container color-container">
@@ -467,6 +479,8 @@
         </nav>
         <p>Copyright &#169; 2024 Sufian Hamza. All Rights Reserved.</p>
     </footer>
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTop" title="Go to top">&#8679;</button>
     <script src="script.js"></script>
 </body>
 

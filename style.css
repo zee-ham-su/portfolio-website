@@ -432,6 +432,20 @@ article .icon {
     border-color: rgb(163, 163, 163);
 }
 
+/* Project Filter/Search */
+#project-filter {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#searchBar {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 /* CONTACT */
 
 #contact {
@@ -652,4 +666,25 @@ form#contact textarea {
 
 form#contact button {
     align-self: flex-start;
+}
+
+/* Scroll to Top Button */
+#scrollToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    font-size: 18px;
+    background-color: #555;
+    color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+}
+
+#scrollToTop:hover {
+    background-color: #333;
 }
