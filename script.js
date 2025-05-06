@@ -1,106 +1,107 @@
-function toggleMenu() {
-  const menu = document.querySelector(".menu-links");
-  const icon = document.querySelector(".hamburger-icon");
-  menu.classList.toggle("open");
-  icon.classList.toggle("open");
-}
+// Wait for DOM content to load before running the script
+document.addEventListener("DOMContentLoaded", function() {
+  // Show body content with fade-in effect once loaded
+  document.body.classList.add("loaded");
+  
+  // Toggle hamburger menu
+  function toggleMenu() {
+    const menu = document.querySelector(".menu-links");
+    const icon = document.querySelector(".hamburger-icon");
+    menu.classList.toggle("open");
+    icon.classList.toggle("open");
+  }
 
-// Add smooth page transitions
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-});
+  // Make toggleMenu function globally accessible
+  window.toggleMenu = toggleMenu;
 
-// Add a toggle button for dark mode
-const darkModeToggle = document.createElement('button');
-darkModeToggle.id = 'dark-mode-toggle';
-darkModeToggle.textContent = 'Toggle Dark Mode';
-document.body.appendChild(darkModeToggle);
-
-// Function to toggle dark mode
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    document.querySelectorAll('nav, .details-container, .btn').forEach((el) => {
-        el.classList.toggle('dark-mode');
-    });
-    darkModeToggle.classList.toggle('dark-mode');
-
-    // Save preference to localStorage
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDarkMode);
-}
-
-// Load dark mode preference on page load
-window.addEventListener('DOMContentLoaded', () => {
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    if (isDarkMode) {
-        toggleDarkMode();
-    }
-});
-
-// Add event listener to the toggle button
-darkModeToggle.addEventListener('click', toggleDarkMode);
-
-// Highlight active section in navigation
-const sections = document.querySelectorAll('section');
-const navLinks = document.querySelectorAll('.nav-links a');
-
-window.addEventListener('scroll', () => {
-    let current = '';
-
-    sections.forEach((section) => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (pageYOffset >= sectionTop - sectionHeight / 3) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach((link) => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').includes(current)) {
-            link.classList.add('active');
-        }
-    });
-});
-
-// Smooth scrolling for navigation links
-navLinks.forEach((link) => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href').substring(1);
-        const targetSection = document.getElementById(targetId);
-        targetSection.scrollIntoView({ behavior: 'smooth' });
-    });
-});
-
-// Scroll to Top Button
-const scrollToTopButton = document.getElementById('scrollToTop');
-
-window.onscroll = function() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        scrollToTopButton.style.display = 'block';
-    } else {
-        scrollToTopButton.style.display = 'none';
-    }
-};
-
-scrollToTopButton.addEventListener('click', function() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// Project Filter/Search
-const searchBar = document.getElementById('searchBar');
-const projectTitles = document.querySelectorAll('.project-title');
-const projectContainers = document.querySelectorAll('.details-container');
-
-searchBar.addEventListener('input', function(e) {
-    const searchText = e.target.value.toLowerCase();
-    projectTitles.forEach((title, index) => {
-        const container = projectContainers[index];
-        if (title.textContent.toLowerCase().includes(searchText)) {
-            container.style.display = 'block';
+  // Project search functionality
+  const searchBar = document.getElementById("searchBar");
+  if (searchBar) {
+    searchBar.addEventListener("keyup", function() {
+      const searchTerm = searchBar.value.toLowerCase();
+      const projects = document.querySelectorAll("#projects .details-container");
+      
+      projects.forEach(project => {
+        const title = project.querySelector(".project-title").textContent.toLowerCase();
+        if (title.indexOf(searchTerm) > -1) {
+          project.style.display = "";
         } else {
-            container.style.display = 'none';
+          project.style.display = "none";
         }
+      });
     });
+  }
+
+  // Scroll to top button functionality
+  const scrollToTopButton = document.getElementById("scrollToTop");
+  
+  window.addEventListener("scroll", function() {
+    if (window.scrollY > 500) {
+      scrollToTopButton.style.display = "block";
+    } else {
+      scrollToTopButton.style.display = "none";
+    }
+  });
+
+  scrollToTopButton.addEventListener("click", function() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+
+  // Add smooth scroll behavior to all internal links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      
+      const targetId = this.getAttribute('href');
+      if (targetId === "#") return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+
+  // Add animation when elements come into view
+  const animateOnScroll = function() {
+    const elements = document.querySelectorAll('.details-container, .certification, .blog-post, .text-container');
+    
+    elements.forEach(element => {
+      const elementTop = element.getBoundingClientRect().top;
+      const elementBottom = element.getBoundingClientRect().bottom;
+      
+      // Check if element is in viewport
+      if (elementTop < window.innerHeight && elementBottom > 0) {
+        element.classList.add('animate');
+      }
+    });
+  };
+
+  // Add CSS class for animated elements
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .details-container, .certification, .blog-post, .text-container {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .details-container.animate, .certification.animate, .blog-post.animate, .text-container.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Run animation check on load and scroll
+  window.addEventListener('scroll', animateOnScroll);
+  window.addEventListener('load', animateOnScroll);
+  
+  // Run animation check once on page load
+  animateOnScroll();
 });
