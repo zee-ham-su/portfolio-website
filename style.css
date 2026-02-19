@@ -884,6 +884,39 @@ body.dark-mode #contact-info {
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    section::before,
+    .btn::before {
+        display: none !important;
+    }
+
+    .details-container:hover,
+    .text-container:hover,
+    .certification:hover,
+    .blog-post:hover,
+    article:hover,
+    .contact-info-container:hover,
+    .theme-toggle:hover,
+    #scrollToTop:hover,
+    .arrow:hover,
+    .btn-color-1:hover,
+    .btn-color-2:hover {
+        transform: none !important;
+    }
+}
+
 /* RESPONSIVE */
 @media (max-width: 1080px) {
     #projects .about-containers {

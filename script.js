@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Dark mode toggle functionality
   const darkModeToggle = document.getElementById("dark-mode-toggle");
   const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+  const prefersReducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let prefersReducedMotion = prefersReducedMotionQuery.matches;
 
   const applyTheme = (theme, persistPreference = false) => {
     const isDark = theme === "dark";
@@ -61,10 +63,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  prefersReducedMotionQuery.addEventListener("change", function (event) {
+    prefersReducedMotion = event.matches;
+  });
+
   // Letter-by-letter animation for name
   const animateName = () => {
     const nameElement = document.getElementById('animated-name');
     if (!nameElement) return;
+
+    if (prefersReducedMotion) {
+      nameElement.style.opacity = '1';
+      return;
+    }
     
     const nameText = nameElement.textContent;
     nameElement.innerHTML = '';
@@ -89,7 +100,11 @@ document.addEventListener("DOMContentLoaded", function () {
   };
   
   // Run name animation after a short delay
-  setTimeout(animateName, 500);
+  if (prefersReducedMotion) {
+    animateName();
+  } else {
+    setTimeout(animateName, 500);
+  }
 
   // Project search functionality
   const searchBar = document.getElementById("searchBar");
@@ -124,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
     scrollToTopButton.addEventListener("click", function () {
       window.scrollTo({
         top: 0,
-        behavior: "smooth"
+        behavior: prefersReducedMotion ? "auto" : "smooth"
       });
     });
   }
@@ -140,17 +155,23 @@ document.addEventListener("DOMContentLoaded", function () {
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
         targetElement.scrollIntoView({
-          behavior: "smooth"
+          behavior: prefersReducedMotion ? "auto" : "smooth"
         });
       }
     });
   });
 
   // Enhanced animation when elements come into view
+  const animatedElementSelector = ".details-container, .certification, .blog-post, .text-container, .profile-badge";
   const animateOnScroll = function () {
-    const elements = document.querySelectorAll(".details-container, .certification, .blog-post, .text-container, .profile-badge");
+    const elements = document.querySelectorAll(animatedElementSelector);
 
     elements.forEach((element) => {
+      if (prefersReducedMotion) {
+        element.classList.add("animate");
+        return;
+      }
+
       const elementTop = element.getBoundingClientRect().top;
       const elementBottom = element.getBoundingClientRect().bottom;
 
@@ -161,48 +182,56 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   };
 
-  // Add CSS class for animated elements
-  const style = document.createElement("style");
-  style.innerHTML = `
-    .details-container, .certification, .blog-post, .text-container, .profile-badge {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    
-    .details-container.animate, .certification.animate, .blog-post.animate, .text-container.animate, .profile-badge.animate {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    /* Staggered animations for child elements */
-    .details-container.animate:nth-child(1) { transition-delay: 0.1s; }
-    .details-container.animate:nth-child(2) { transition-delay: 0.2s; }
-    .details-container.animate:nth-child(3) { transition-delay: 0.3s; }
-    .profile-badge.animate:nth-child(1) { transition-delay: 0.1s; }
-    .profile-badge.animate:nth-child(2) { transition-delay: 0.2s; }
-    .profile-badge.animate:nth-child(3) { transition-delay: 0.3s; }
-  `;
-  document.head.appendChild(style);
+  if (!prefersReducedMotion) {
+    // Add CSS class for animated elements
+    const style = document.createElement("style");
+    style.innerHTML = `
+      .details-container, .certification, .blog-post, .text-container, .profile-badge {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      
+      .details-container.animate, .certification.animate, .blog-post.animate, .text-container.animate, .profile-badge.animate {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      /* Staggered animations for child elements */
+      .details-container.animate:nth-child(1) { transition-delay: 0.1s; }
+      .details-container.animate:nth-child(2) { transition-delay: 0.2s; }
+      .details-container.animate:nth-child(3) { transition-delay: 0.3s; }
+      .profile-badge.animate:nth-child(1) { transition-delay: 0.1s; }
+      .profile-badge.animate:nth-child(2) { transition-delay: 0.2s; }
+      .profile-badge.animate:nth-child(3) { transition-delay: 0.3s; }
+    `;
+    document.head.appendChild(style);
 
-  // Run animation check on load and scroll
-  window.addEventListener("scroll", animateOnScroll);
-  window.addEventListener("load", animateOnScroll);
+    // Run animation check on load and scroll
+    window.addEventListener("scroll", animateOnScroll);
+    window.addEventListener("load", animateOnScroll);
 
-  // Run animation check once on page load
-  animateOnScroll();
+    // Run animation check once on page load
+    animateOnScroll();
+  } else {
+    document.querySelectorAll(animatedElementSelector).forEach((element) => {
+      element.classList.add("animate");
+    });
+  }
 
   // Add button hover effects that follow mouse position
   const buttons = document.querySelectorAll(".btn");
 
-  buttons.forEach((button) => {
-    button.addEventListener("mousemove", function (e) {
-      const rect = button.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+  if (!prefersReducedMotion) {
+    buttons.forEach((button) => {
+      button.addEventListener("mousemove", function (e) {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-      button.style.setProperty("--x", x + "px");
-      button.style.setProperty("--y", y + "px");
+        button.style.setProperty("--x", x + "px");
+        button.style.setProperty("--y", y + "px");
+      });
     });
-  });
+  }
 });
