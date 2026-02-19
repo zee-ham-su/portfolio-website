@@ -1,51 +1,64 @@
 // Wait for DOM content to load before running the script
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   // Show body content with fade-in effect once loaded
   document.body.classList.add("loaded");
-  
+
   // Toggle hamburger menu
   function toggleMenu() {
     const menu = document.querySelector(".menu-links");
     const icon = document.querySelector(".hamburger-icon");
-    menu.classList.toggle("open");
-    icon.classList.toggle("open");
+
+    if (!menu || !icon) {
+      return;
+    }
+
+    const isOpen = menu.classList.toggle("open");
+    icon.classList.toggle("open", isOpen);
+    icon.setAttribute("aria-expanded", String(isOpen));
   }
 
   // Make toggleMenu function globally accessible
   window.toggleMenu = toggleMenu;
 
   // Dark mode toggle functionality
-  const darkModeToggle = document.getElementById('dark-mode-toggle');
-  const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-  
-  // Check if user has previously set a preference
-  const currentTheme = localStorage.getItem('theme');
-  if (currentTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    darkModeToggle.textContent = '☀️';
-  } else if (currentTheme === 'light') {
-    document.body.classList.remove('dark-mode');
-    darkModeToggle.textContent = '🌙';
-  } else if (prefersDarkScheme.matches) {
-    // If user prefers dark mode in system settings
-    document.body.classList.add('dark-mode');
-    darkModeToggle.textContent = '☀️';
-  }
-  
-  darkModeToggle.addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    let theme = 'light';
-    
-    if (document.body.classList.contains('dark-mode')) {
-      theme = 'dark';
-      this.textContent = '☀️';
-      this.classList.add('rotate');
-    } else {
-      this.textContent = '🌙';
-      this.classList.remove('rotate');
+  const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const applyTheme = (theme, persistPreference = false) => {
+    const isDark = theme === "dark";
+    document.body.classList.toggle("dark-mode", isDark);
+
+    if (darkModeToggle) {
+      darkModeToggle.textContent = isDark ? "☀️" : "🌙";
+      darkModeToggle.classList.toggle("rotate", isDark);
+      darkModeToggle.setAttribute("aria-pressed", String(isDark));
     }
-    
-    localStorage.setItem('theme', theme);
+
+    if (persistPreference) {
+      localStorage.setItem("theme", theme);
+    }
+  };
+
+  // Check if user has previously set a preference
+  const currentTheme = localStorage.getItem("theme");
+  if (currentTheme === "dark" || currentTheme === "light") {
+    applyTheme(currentTheme);
+  } else {
+    applyTheme(prefersDarkScheme.matches ? "dark" : "light");
+  }
+
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener("click", function () {
+      const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
+      applyTheme(nextTheme, true);
+    });
+  }
+
+  prefersDarkScheme.addEventListener("change", function (event) {
+    const savedTheme = localStorage.getItem("theme");
+    if (!savedTheme) {
+      applyTheme(event.matches ? "dark" : "light");
+    }
   });
 
   // Letter-by-letter animation for name
@@ -81,11 +94,11 @@ document.addEventListener("DOMContentLoaded", function() {
   // Project search functionality
   const searchBar = document.getElementById("searchBar");
   if (searchBar) {
-    searchBar.addEventListener("keyup", function() {
+    searchBar.addEventListener("input", function () {
       const searchTerm = searchBar.value.toLowerCase();
       const projects = document.querySelectorAll("#projects .details-container");
-      
-      projects.forEach(project => {
+
+      projects.forEach((project) => {
         const title = project.querySelector(".project-title").textContent.toLowerCase();
         if (title.indexOf(searchTerm) > -1) {
           project.style.display = "";
@@ -98,56 +111,58 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Scroll to top button functionality
   const scrollToTopButton = document.getElementById("scrollToTop");
-  
-  window.addEventListener("scroll", function() {
-    if (window.scrollY > 500) {
-      scrollToTopButton.style.display = "block";
-    } else {
-      scrollToTopButton.style.display = "none";
-    }
-  });
 
-  scrollToTopButton.addEventListener("click", function() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
+  if (scrollToTopButton) {
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 500) {
+        scrollToTopButton.style.display = "block";
+      } else {
+        scrollToTopButton.style.display = "none";
+      }
     });
-  });
+
+    scrollToTopButton.addEventListener("click", function () {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  }
 
   // Add smooth scroll behavior to all internal links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
       e.preventDefault();
-      
-      const targetId = this.getAttribute('href');
+
+      const targetId = this.getAttribute("href");
       if (targetId === "#") return;
-      
+
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
         targetElement.scrollIntoView({
-          behavior: 'smooth'
+          behavior: "smooth"
         });
       }
     });
   });
 
   // Enhanced animation when elements come into view
-  const animateOnScroll = function() {
-    const elements = document.querySelectorAll('.details-container, .certification, .blog-post, .text-container, .profile-badge');
-    
-    elements.forEach(element => {
+  const animateOnScroll = function () {
+    const elements = document.querySelectorAll(".details-container, .certification, .blog-post, .text-container, .profile-badge");
+
+    elements.forEach((element) => {
       const elementTop = element.getBoundingClientRect().top;
       const elementBottom = element.getBoundingClientRect().bottom;
-      
+
       // Check if element is in viewport
       if (elementTop < window.innerHeight - 50 && elementBottom > 0) {
-        element.classList.add('animate');
+        element.classList.add("animate");
       }
     });
   };
 
   // Add CSS class for animated elements
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.innerHTML = `
     .details-container, .certification, .blog-post, .text-container, .profile-badge {
       opacity: 0;
@@ -171,23 +186,23 @@ document.addEventListener("DOMContentLoaded", function() {
   document.head.appendChild(style);
 
   // Run animation check on load and scroll
-  window.addEventListener('scroll', animateOnScroll);
-  window.addEventListener('load', animateOnScroll);
-  
+  window.addEventListener("scroll", animateOnScroll);
+  window.addEventListener("load", animateOnScroll);
+
   // Run animation check once on page load
   animateOnScroll();
 
   // Add button hover effects that follow mouse position
-  const buttons = document.querySelectorAll('.btn');
-  
-  buttons.forEach(button => {
-    button.addEventListener('mousemove', function(e) {
+  const buttons = document.querySelectorAll(".btn");
+
+  buttons.forEach((button) => {
+    button.addEventListener("mousemove", function (e) {
       const rect = button.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
-      button.style.setProperty('--x', x + 'px');
-      button.style.setProperty('--y', y + 'px');
+
+      button.style.setProperty("--x", x + "px");
+      button.style.setProperty("--y", y + "px");
     });
   });
 });

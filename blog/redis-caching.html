@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understanding Redis Caching | Sufian Hamza</title>
+    <style>
+        :root {
+            --bg: #f5f8fa;
+            --text: #1f2937;
+            --muted: #4b5563;
+            --primary: #2563eb;
+            --card: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Montserrat", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 40px 20px;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--muted);
+        }
+
+        h2 {
+            margin: 1.5rem 0 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        ul {
+            padding-left: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Understanding Redis Caching</h1>
+        <p>
+            Redis is an in-memory data store that helps applications serve repeated data quickly.
+            It is ideal for reducing database load, improving response times, and handling spikes in traffic.
+        </p>
+
+        <h2>When to cache</h2>
+        <ul>
+            <li>Frequently requested read-heavy endpoints.</li>
+            <li>Expensive computations that do not change often.</li>
+            <li>Session or token metadata with short expiration windows.</li>
+        </ul>
+
+        <h2>Practical caching flow</h2>
+        <p>
+            Use a cache-first strategy: check Redis for data, return it on a hit, and on a miss query the database,
+            then store the result with a suitable TTL. This keeps stale data windows small while boosting performance.
+        </p>
+
+        <h2>Key best practices</h2>
+        <ul>
+            <li>Set clear TTL values to avoid stale entries.</li>
+            <li>Use namespaced keys like <code>user:123:profile</code>.</li>
+            <li>Track hit/miss rates and memory usage.</li>
+            <li>Invalidate or refresh keys after write operations.</li>
+        </ul>
+
+        <p>
+            A good caching strategy is not just about speed. It also improves resilience and helps your backend scale
+            without overloading core databases.
+        </p>
+
+        <a class="back-link" href="../index.html#blog">Back to Portfolio Blog</a>
+    </main>
+</body>
+</html>

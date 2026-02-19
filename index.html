@@ -34,19 +34,20 @@
     <nav id="hamburger-nav">
         <div class="logo">Sufian Hamza | Backend Developer</div>
         <div class="hamburger-menu">
-            <div class="hamburger-icon" onclick="toggleMenu()">
+            <button class="hamburger-icon" type="button" aria-label="Toggle navigation menu" aria-expanded="false" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
-            <div class="menu-links">
+            </button>
+            <ul class="menu-links">
                 <li><a href="#about" onclick="toggleMenu()">About</a></li>
                 <li><a href="#experience" onclick="toggleMenu()">Experience</a></li>
                 <li><a href="#projects" onclick="toggleMenu()">Projects</a></li>
                 <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
-            </div>
+            </ul>
         </div>
     </nav>
+    <button id="dark-mode-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">🌙</button>
     <section id="profile">
         <div class="section__text">
             <p class="section__text__p1">Hello, I'm</p>
@@ -61,10 +62,13 @@
                 </button>
             </div>
             <div id="socials-container">
-                <img src="./assets/linkedin.png" alt="My LinkedIn profile" class="icon"
-                    onclick="location.href='https://www.linkedin.com/in/hamza-sufian-4b1200106?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BFi2xtFT2TN6ev2rzOmdROA%3D%3D'" />
-                <img src="./assets/github.png" alt="My Github profile" class="icon"
-                    onclick="location.href='https://github.com/zee-ham-su'" />
+                <a href="https://www.linkedin.com/in/hamza-sufian-4b1200106?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BFi2xtFT2TN6ev2rzOmdROA%3D%3D"
+                    target="_blank" rel="noopener noreferrer" aria-label="Open LinkedIn profile">
+                    <img src="./assets/linkedin.png" alt="My LinkedIn profile" class="icon" />
+                </a>
+                <a href="https://github.com/zee-ham-su" target="_blank" rel="noopener noreferrer" aria-label="Open GitHub profile">
+                    <img src="./assets/github.png" alt="My Github profile" class="icon" />
+                </a>
             </div>
         </div>
     </section>
@@ -93,7 +97,9 @@
                 </div>
             </div>
         </div>
-        <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#experience'" />
+        <a href="#experience" class="arrow" aria-label="Go to Experience section">
+            <img src="./assets/arrow.png" alt="Arrow icon" class="icon" />
+        </a>
     </section>
     <section id="experience">
         <p class="section__text__p1">Explore My</p>
@@ -173,6 +179,7 @@
                                 <h3>ExpressJs</h3>
                                 <p>Intermediate</p>
                             </div>
+                        </article>
                     </div>
                 </div>
                 <div class="details-container">
@@ -280,7 +287,9 @@
                 </div>
             </div>
         </div>
-        <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#projects'" />
+        <a href="#projects" class="arrow" aria-label="Go to Projects section">
+            <img src="./assets/arrow.png" alt="Arrow icon" class="icon" />
+        </a>
     </section>
     <section id="projects">
         <p class="section__text__p1">Browse My Recent</p>
@@ -400,7 +409,9 @@
                 </div>
             </div>
         </div>
-        <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#contact'" />
+        <a href="#contact" class="arrow" aria-label="Go to Contact form section">
+            <img src="./assets/arrow.png" alt="Arrow icon" class="icon" />
+        </a>
     </section>
 
     <section id="certifications">
@@ -469,10 +480,10 @@
         </div>
     </section>
 
-    <section id="contact-form">
+    <section id="contact">
         <p class="section__text__p1">Reach Out</p>
         <h1 class="title">Contact Form</h1>
-        <form id="contact" action="https://formspree.io/f/mjkwwynp" method="POST">
+        <form id="contact-form" action="https://formspree.io/f/mjkwwynp" method="POST">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
 
@@ -485,17 +496,17 @@
             <button type="submit" class="btn btn-color-1">Send</button>
         </form>
     </section>
-    <section id="contact">
+    <section id="contact-info">
         <p class="section__text__p1">Get in Touch</p>
         <h1 class="title">Contact Me</h1>
         <div class="contact-info-upper-container">
             <div class="contact-info-container">
                 <img src="./assets/email.png" alt="Email icon" class="icon contact-icon email-icon" />
-                <p><a href="mailto:examplemail@gmail.com">hamzasufian2014@gmail.com</a></p>
+                <p><a href="mailto:hamzasufian2014@gmail.com">hamzasufian2014@gmail.com</a></p>
             </div>
             <div class="contact-info-container">
                 <img src="./assets/linkedin.png" alt="LinkedIn icon" class="icon contact-icon" />
-                <p><a href="https://www.linkedin.com">LinkedIn</a></p>
+                <p><a href="https://www.linkedin.com/in/hamza-sufian-4b1200106/" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
             </div>
         </div>
     </section>
@@ -513,7 +524,7 @@
         <p>Copyright &#169; 2024 Sufian Hamza. All Rights Reserved.</p>
     </footer>
     <!-- Scroll to Top Button -->
-    <button id="scrollToTop" title="Go to top">&#8679;</button>
+    <button id="scrollToTop" type="button" title="Go to top" aria-label="Scroll to top">&#8679;</button>
     <script src="script.js"></script>
 </body>
 
